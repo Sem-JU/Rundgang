@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bildungshistorischer Stadtrundgang</title>
+
+  <!-- Leaflet CSS aus CDN – kein Download nötig -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Georgia, serif;
+      color: #2c2c2a;
+    }
+
+    header {
+      background: #2c2c2a;
+      color: #f5f0e8;
+      padding: 1.2rem 2rem;
+    }
+
+    header h1 {
+      font-size: 1.2rem;
+      font-weight: normal;
+    }
+
+    header span {
+      font-size: 0.85rem;
+      opacity: 0.6;
+      display: block;
+      margin-top: 0.2rem;
+    }
+
+    #karte {
+      height: calc(100vh - 68px);
+      width: 100%;
+    }
+
+    /* Popup-Stil */
+    .leaflet-popup-content-wrapper {
+      border-radius: 6px;
+      max-width: 320px;
+    }
+    .leaflet-popup-content {
+      font-family: Georgia, serif;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .popup-titel {
+      font-weight: bold;
+      margin-bottom: 0.2rem;
+    }
+    .popup-meta {
+      font-size: 0.78rem;
+      color: #888;
+      font-style: italic;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Bildungshistorischer Stadtrundgang</h1>
+  <span>Schule und Stadt – räumliche Dimensionen</span>
+</header>
+
+<div id="karte"></div>
+
+<!-- Leaflet JS aus CDN -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+  // Karte initialisieren (Mittelpunkt Berlin)
+  const karte = L.map('karte').setView([52.5250, 13.3980], 13);
+
+  // OpenStreetMap-Kacheln (kostenlos, kein API-Key nötig)
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>-Mitwirkende',
+    maxZoom: 19
+  }).addTo(karte);
+
+  // Stationen aus stationen.json laden
+  fetch('stationen.json')
+    .then(r => r.json())
+    .then(stationen => {
+      stationen.forEach(station => {
+        const popupInhalt = `
+          <div class="popup-titel">${station.name}</div>
+          <div class="popup-meta">${station.kategorie || ''} · ${station.autor || ''}</div>
+          <div>${station.text}</div>
+        `;
+        L.marker([station.lat, station.lng])
+          .addTo(karte)
+          .bindPopup(popupInhalt);
+      });
+    })
+    .catch(() => {
+      document.getElementById('karte').innerHTML =
+        '<p style="padding:2rem;font-size:0.9rem;">⚠ stationen.json konnte nicht geladen werden.</p>';
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+[
+  {
+    "name": "BEISPIEL – Hauptgebäude der Humboldt-Universität",
+    "lat": 52.5189,
+    "lng": 13.3931,
+    "kategorie": "Hochschule",
+    "autor": "BEISPIEL Vorname Nachname",
+    "text": "BEISPIEL-Text: Hier könnte Ihre Vignette stehen."
+  },
+
+  {
+    "name": "Titel Ihrer Station",
+    "lat": 0.0000,
+    "lng": 0.0000,
+    "kategorie": "Ihre Kategorie",
+    "autor": "Vorname Nachname",
+    "text": "Ihr Text zur Station."
+  }
+
+]
